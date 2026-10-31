@@ -1,8 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 
-// Logo + menu share the top-right corner on every page. The transparent mark has a white L,
-// so light backgrounds use the panel version.
+// Logo + menu share the top-right corner on every page. The animated SVG is loaded with a plain <img>
+// so its built-in CSS animation runs untouched; light backgrounds get the version with the black box.
 export default function SiteLogo({ onLight = false, children }: { onLight?: boolean; children?: React.ReactNode }) {
   return (
     <div className="absolute right-6 top-6 z-30 flex items-center gap-5 md:right-12 md:gap-10">
@@ -12,13 +11,13 @@ export default function SiteLogo({ onLight = false, children }: { onLight?: bool
         </nav>
       )}
       <Link href="/" aria-label="Daniel Livingstone Manka — home" className="site-logo shrink-0">
-        <Image
-          src={onLight ? "/logo/dlm-mark.svg" : "/logo/dlm-mark-transparent.svg"}
-          alt="DLM"
-          width={78}
-          height={58}
-          priority
-          className="h-10 w-auto md:h-12"
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={onLight ? "/logo/dlm-logo-animated.svg" : "/logo/dlm-logo-animated-transparent.svg"}
+          alt="Daniel Livingstone Manka"
+          width={640}
+          height={352}
+          className="h-12 w-auto md:h-16"
         />
       </Link>
     </div>

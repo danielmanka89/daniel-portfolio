@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { MotionConfig, motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Moon, Sun } from "lucide-react";
-import { Bodoni_Moda } from "next/font/google";
+import { Outfit } from "next/font/google";
 import { Aurora, SpectrumRing, WaveField } from "@/components/HeroVisuals";
 import SiteLogo from "@/components/SiteLogo";
 import { FaFacebookF, FaInstagram, FaPinterestP, FaXTwitter, FaYoutube } from "react-icons/fa6";
@@ -23,7 +23,7 @@ const socials = [
   { label: "Facebook", Icon: FaFacebookF, bg: "bg-[#1877F2]" },
 ];
 
-const display = Bodoni_Moda({ weight: ["500", "600"], subsets: ["latin"] });
+const display = Outfit({ weight: ["600"], subsets: ["latin"] });
 
 const ease = [0.22, 1, 0.36, 1] as const;
 const nameLines = ["Daniel", "Livingstone", "Manka"];
@@ -104,7 +104,7 @@ export default function Home() {
           >
             Hi, I&apos;M
           </motion.p>
-          <h1 className={`${display.className} mt-3 text-6xl font-semibold leading-[0.95] tracking-[-0.02em] sm:text-7xl md:text-8xl xl:text-[6.5rem]`}>
+          <h1 className={`${display.className} mt-3 text-6xl font-semibold leading-[0.92] tracking-[-0.035em] sm:text-7xl md:text-8xl xl:text-[6.5rem]`}>
             {nameLines.map((line, i) => (
               <span key={line} className="block overflow-hidden pb-[0.06em]">
                 <motion.span
