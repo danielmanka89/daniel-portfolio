@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { Moon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Check, Moon, Sun } from "lucide-react";
 import { FaFacebookF, FaInstagram, FaPinterestP, FaXTwitter, FaYoutube } from "react-icons/fa6";
 
 const nav = [
@@ -30,11 +31,40 @@ const glows = [
 ];
 
 const ease = [0.22, 1, 0.36, 1] as const;
-const diagonal = "bg-[repeating-linear-gradient(45deg,rgba(255,255,255,0.08)_0_1px,transparent_1px_14px)]";
+const diagonal =
+  "bg-[repeating-linear-gradient(45deg,rgba(0,0,0,0.1)_0_1px,transparent_1px_14px)] dark:bg-[repeating-linear-gradient(45deg,rgba(255,255,255,0.08)_0_1px,transparent_1px_14px)]";
+
+type Theme = "dark" | "light";
+const themes = [
+  { value: "dark", label: "Dark", Icon: Moon },
+  { value: "light", label: "Light", Icon: Sun },
+] as const;
 
 export default function Home() {
+  const [theme, setTheme] = useState<Theme>("dark");
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("theme");
+      if (saved === "light" || saved === "dark") setTheme(saved);
+    } catch {}
+  }, []);
+
+  const chooseTheme = (value: Theme) => {
+    setTheme(value);
+    setMenuOpen(false);
+    try {
+      localStorage.setItem("theme", value);
+    } catch {}
+  };
+
+  const ThemeIcon = theme === "dark" ? Moon : Sun;
+
   return (
-    <main className="relative min-h-dvh overflow-hidden bg-black text-white">
+    <main
+      className={`${theme === "dark" ? "dark" : ""} relative min-h-dvh overflow-hidden bg-white text-black transition-colors duration-500 dark:bg-black dark:text-white`}
+    >
       {/* Corner diagonal patterns */}
       <div aria-hidden className={`absolute left-0 top-0 h-72 w-72 ${diagonal} [mask-image:radial-gradient(circle_at_top_left,black,transparent_70%)]`} />
       <div aria-hidden className={`absolute bottom-0 right-0 h-72 w-72 ${diagonal} [mask-image:radial-gradient(circle_at_bottom_right,black,transparent_70%)]`} />
@@ -59,18 +89,50 @@ export default function Home() {
       {/* Navbar */}
       <header className="relative z-20 flex items-center justify-between px-6 py-6 md:px-12">
         <div className="flex items-center gap-8">
-          <button
-            aria-label="Toggle theme"
-            className="flex h-11 w-11 items-center justify-center rounded-full bg-neutral-900 text-neutral-300 transition-colors hover:text-white"
-          >
-            <Moon size={18} />
-          </button>
+          <div className="relative">
+            <button
+              onClick={() => setMenuOpen((o) => !o)}
+              aria-label="Choose theme"
+              aria-expanded={menuOpen}
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-neutral-200 text-neutral-700 transition-colors hover:text-black dark:bg-neutral-900 dark:text-neutral-300 dark:hover:text-white"
+            >
+              <ThemeIcon size={18} />
+            </button>
+            <AnimatePresence>
+              {menuOpen && (
+                <motion.ul
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute left-0 top-14 z-30 w-40 overflow-hidden rounded-xl border border-neutral-200 bg-white p-1 shadow-xl dark:border-neutral-800 dark:bg-neutral-950"
+                >
+                  {themes.map(({ value, label, Icon }) => (
+                    <li key={value}>
+                      <button
+                        onClick={() => chooseTheme(value)}
+                        className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-neutral-700 transition-colors hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-900"
+                      >
+                        <Icon size={16} />
+                        {label}
+                        {theme === value && <Check size={14} className="ml-auto text-[#FF0000]" />}
+                      </button>
+                    </li>
+                  ))}
+                </motion.ul>
+              )}
+            </AnimatePresence>
+          </div>
           <nav className="hidden gap-7 text-xs font-semibold tracking-[0.2em] lg:flex">
             {nav.map((item) => (
               <Link
                 key={item.label}
                 href={item.href}
-                className={item.label === "HOME" ? "text-[#FF0000]" : "text-neutral-300 transition-colors hover:text-white"}
+                className={
+                  item.label === "HOME"
+                    ? "text-[#FF0000]"
+                    : "text-neutral-600 transition-colors hover:text-black dark:text-neutral-300 dark:hover:text-white"
+                }
               >
                 {item.label}
               </Link>
@@ -93,7 +155,7 @@ export default function Home() {
             <br />
             Manka
           </h1>
-          <p className="mt-8 max-w-md text-lg text-neutral-400">
+          <p className="mt-8 max-w-md text-lg text-neutral-600 dark:text-neutral-400">
             A Software Engineer &amp; Musician who empowers brands, builds tech, and creates music with children.
           </p>
           <div className="mt-10 flex flex-wrap items-center gap-3">
