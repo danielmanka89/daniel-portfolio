@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Check, Moon, Sun } from "lucide-react";
+import Logo from "@/components/Logo";
 import { FaFacebookF, FaInstagram, FaPinterestP, FaXTwitter, FaYoutube } from "react-icons/fa6";
 
 const nav = [
@@ -139,7 +140,7 @@ export default function Home() {
             ))}
           </nav>
         </div>
-        <span className="text-3xl font-black tracking-tight">Daniel</span>
+        <Logo size={48} />
       </header>
 
       {/* Hero */}
