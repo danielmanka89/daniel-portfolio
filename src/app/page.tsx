@@ -102,7 +102,7 @@ export default function Home() {
             ))}
           </nav>
         </div>
-        <Logo size={48} />
+        <Logo />
       </header>
 
       {/* Hero */}
