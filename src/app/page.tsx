@@ -79,7 +79,7 @@ export default function Home() {
         />
       ))}
 
-      <SiteLogo />
+      <SiteLogo onLight={theme === "light"} />
 
       {/* Navbar */}
       <header className="relative z-20 flex items-center justify-between px-6 py-6 md:px-12">

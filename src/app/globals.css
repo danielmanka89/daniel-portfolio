@@ -11,13 +11,3 @@ body {
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
-/* Site logo: "Ligature lockup" */
-@layer components {
-  .site-logo { display: inline-flex; align-items: center; gap: 11px; color: inherit; text-decoration: none; }
-  .site-logo__mark { display: block; overflow: visible; }
-  .site-logo__bar { width: 1px; align-self: stretch; background: currentColor; opacity: .3; }
-  .site-logo__name { display: grid; gap: 4px; text-align: left; }
-  .site-logo__name b { font: 500 15px/1 var(--font-outfit), system-ui, sans-serif; letter-spacing: .02em; white-space: nowrap; }
-  .site-logo__manka { color: #FF0000; }
-  .site-logo__name em { font: 400 7px/1 var(--font-outfit), system-ui, sans-serif; font-style: normal; letter-spacing: .38em; text-transform: uppercase; opacity: .5; }
-}
