@@ -3,8 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { Check, Moon, Sun } from "lucide-react";
+import { motion } from "framer-motion";
+import { Moon, Sun } from "lucide-react";
+import FeatherLines from "@/components/FeatherLines";
 import Logo from "@/components/Logo";
 import { FaFacebookF, FaInstagram, FaPinterestP, FaXTwitter, FaYoutube } from "react-icons/fa6";
 
@@ -36,14 +37,9 @@ const diagonal =
   "bg-[repeating-linear-gradient(45deg,rgba(0,0,0,0.1)_0_1px,transparent_1px_14px)] dark:bg-[repeating-linear-gradient(45deg,rgba(255,255,255,0.08)_0_1px,transparent_1px_14px)]";
 
 type Theme = "dark" | "light";
-const themes = [
-  { value: "dark", label: "Dark", Icon: Moon },
-  { value: "light", label: "Light", Icon: Sun },
-] as const;
 
 export default function Home() {
   const [theme, setTheme] = useState<Theme>("dark");
-  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     try {
@@ -52,9 +48,9 @@ export default function Home() {
     } catch {}
   }, []);
 
-  const chooseTheme = (value: Theme) => {
+  const toggleTheme = () => {
+    const value: Theme = theme === "dark" ? "light" : "dark";
     setTheme(value);
-    setMenuOpen(false);
     try {
       localStorage.setItem("theme", value);
     } catch {}
@@ -90,40 +86,6 @@ export default function Home() {
       {/* Navbar */}
       <header className="relative z-20 flex items-center justify-between px-6 py-6 md:px-12">
         <div className="flex items-center gap-8">
-          <div className="relative">
-            <button
-              onClick={() => setMenuOpen((o) => !o)}
-              aria-label="Choose theme"
-              aria-expanded={menuOpen}
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-neutral-200 text-neutral-700 transition-colors hover:text-black dark:bg-neutral-900 dark:text-neutral-300 dark:hover:text-white"
-            >
-              <ThemeIcon size={18} />
-            </button>
-            <AnimatePresence>
-              {menuOpen && (
-                <motion.ul
-                  initial={{ opacity: 0, y: -8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.2 }}
-                  className="absolute left-0 top-14 z-30 w-40 overflow-hidden rounded-xl border border-neutral-200 bg-white p-1 shadow-xl dark:border-neutral-800 dark:bg-neutral-950"
-                >
-                  {themes.map(({ value, label, Icon }) => (
-                    <li key={value}>
-                      <button
-                        onClick={() => chooseTheme(value)}
-                        className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-neutral-700 transition-colors hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-900"
-                      >
-                        <Icon size={16} />
-                        {label}
-                        {theme === value && <Check size={14} className="ml-auto text-[#FF0000]" />}
-                      </button>
-                    </li>
-                  ))}
-                </motion.ul>
-              )}
-            </AnimatePresence>
-          </div>
           <nav className="hidden gap-7 text-xs font-semibold tracking-[0.2em] lg:flex">
             {nav.map((item) => (
               <Link
@@ -179,22 +141,38 @@ export default function Home() {
           </div>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, x: 120 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1.2, delay: 0.2, ease }}
-          className="relative mx-auto aspect-[4/5] w-full max-w-lg [mask-image:linear-gradient(to_bottom,black_55%,transparent)]"
-        >
-          <Image
-            src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1000&auto=format&fit=crop"
-            alt="Portrait of Daniel Manka"
-            fill
-            priority
-            sizes="(min-width: 1024px) 50vw, 100vw"
-            className="object-cover grayscale-[30%]"
-          />
-        </motion.div>
+        <div className="relative mx-auto aspect-[4/5] w-full max-w-lg">
+          <FeatherLines className="absolute -inset-10 h-[calc(100%+5rem)] w-[calc(100%+5rem)]" />
+          <motion.div
+            initial={{ opacity: 0, x: 120 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1.2, delay: 0.2, ease }}
+            className="absolute inset-0"
+            style={{
+              maskImage: "linear-gradient(to bottom, black 70%, transparent 100%)",
+              WebkitMaskImage: "linear-gradient(to bottom, black 70%, transparent 100%)",
+              mixBlendMode: theme === "light" ? "multiply" : "normal",
+            }}
+          >
+            <Image
+              src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1000&auto=format&fit=crop"
+              alt="Portrait of Daniel Manka"
+              fill
+              priority
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="object-cover grayscale-[30%]"
+            />
+          </motion.div>
+        </div>
       </section>
+
+      <button
+        onClick={toggleTheme}
+        aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+        className="fixed bottom-6 left-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-neutral-200 text-neutral-700 shadow-lg transition-colors hover:text-black dark:bg-neutral-900 dark:text-neutral-300 dark:hover:text-white"
+      >
+        <ThemeIcon size={20} />
+      </button>
     </main>
   );
 }
