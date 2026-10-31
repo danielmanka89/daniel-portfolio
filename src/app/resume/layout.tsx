@@ -1,8 +1,8 @@
 import Link from "next/link";
+import SiteLogo from "@/components/SiteLogo";
 import { site } from "@/lib/site";
 
 const nav = [
-  { href: "/", label: "Home" },
   { href: "/resume#about", label: "About" },
   { href: "/resume#skills", label: "Skills" },
   { href: "/resume#contact", label: "Contact" },
@@ -10,7 +10,8 @@ const nav = [
 
 export default function ResumeLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-white text-black md:pl-60">
+    <div className="relative min-h-screen bg-white text-black md:pl-60">
+      <SiteLogo className="text-white md:text-black" />
       <aside className="flex flex-col bg-black text-white md:fixed md:inset-y-0 md:left-0 md:w-60">
         <div className="flex h-24 w-24 items-center justify-center bg-yellow-400 text-4xl font-black text-black">
           {site.name[0]}

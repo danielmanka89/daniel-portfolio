@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Moon, Sun } from "lucide-react";
 import FeatherLines from "@/components/FeatherLines";
-import Logo from "@/components/Logo";
+import SiteLogo from "@/components/SiteLogo";
 import { FaFacebookF, FaInstagram, FaPinterestP, FaXTwitter, FaYoutube } from "react-icons/fa6";
 
 const nav = [
@@ -79,6 +79,8 @@ export default function Home() {
         />
       ))}
 
+      <SiteLogo />
+
       {/* Navbar */}
       <header className="relative z-20 flex items-center justify-between px-6 py-6 md:px-12">
         <div className="flex items-center gap-8">
@@ -94,7 +96,6 @@ export default function Home() {
             ))}
           </nav>
         </div>
-        <Logo />
       </header>
 
       {/* Hero */}
