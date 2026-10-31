@@ -10,13 +10,9 @@ import Logo from "@/components/Logo";
 import { FaFacebookF, FaInstagram, FaPinterestP, FaXTwitter, FaYoutube } from "react-icons/fa6";
 
 const nav = [
-  { href: "/resume#contact", label: "CONTACT" },
-  { href: "#", label: "BLOG" },
-  { href: "/music", label: "CHANNELS" },
-  { href: "/music#demos", label: "PLAYLISTS" },
-  { href: "/music#videos", label: "VIDEOS" },
-  { href: "/resume", label: "ABOUT" },
-  { href: "/", label: "HOME" },
+  { href: "/resume", label: "ENGINEER" },
+  { href: "/music", label: "MUSIC" },
+  { href: "/resume#projects", label: "PROJECTS" },
 ];
 
 const socials = [
@@ -86,16 +82,12 @@ export default function Home() {
       {/* Navbar */}
       <header className="relative z-20 flex items-center justify-between px-6 py-6 md:px-12">
         <div className="flex items-center gap-8">
-          <nav className="hidden gap-7 text-xs font-semibold tracking-[0.2em] lg:flex">
+          <nav className="flex gap-6 text-xs font-semibold tracking-[0.2em] md:gap-10">
             {nav.map((item) => (
               <Link
                 key={item.label}
                 href={item.href}
-                className={
-                  item.label === "HOME"
-                    ? "text-[#FF0000]"
-                    : "text-neutral-600 transition-colors hover:text-black dark:text-neutral-300 dark:hover:text-white"
-                }
+                className="text-neutral-600 transition-colors hover:text-[#FF0000] dark:text-neutral-300 dark:hover:text-[#FF0000]"
               >
                 {item.label}
               </Link>
@@ -113,8 +105,10 @@ export default function Home() {
           transition={{ duration: 1, ease }}
         >
           <p className="text-4xl font-light italic md:text-6xl">Hi, I&apos;M</p>
-          <h1 className="mt-2 text-6xl font-black uppercase leading-[0.9] tracking-tight md:text-8xl xl:text-9xl">
+          <h1 className="mt-2 text-5xl font-black uppercase leading-[0.9] tracking-tight sm:text-6xl md:text-7xl xl:text-[5.5rem]">
             Daniel
+            <br />
+            Livingstone
             <br />
             Manka
           </h1>
@@ -155,12 +149,12 @@ export default function Home() {
             }}
           >
             <Image
-              src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1000&auto=format&fit=crop"
-              alt="Portrait of Daniel Manka"
+              src="/daniel.jpg"
+              alt="Portrait of Daniel Livingstone Manka"
               fill
               priority
               sizes="(min-width: 1024px) 50vw, 100vw"
-              className="object-cover grayscale-[30%]"
+              className="object-cover object-top"
             />
           </motion.div>
         </div>
