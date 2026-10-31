@@ -56,16 +56,16 @@ const mix = (a: number[], b: number[], k: number) => a.map((v, i) => Math.round(
 export function WaveField({ dark }: { dark: boolean }) {
   const ref = useCanvasLoop((ctx, w, h, t) => {
     ctx.clearRect(0, 0, w, h);
-    const lines = 36;
+    const lines = 44;
     const peak = w > 900 ? 0.72 : 0.5;
     for (let i = 0; i < lines; i++) {
       const k = i / (lines - 1);
-      const y0 = h * (0.3 + 0.7 * Math.pow(k, 1.4));
+      const y0 = h * (0.06 + 0.94 * Math.pow(k, 1.25));
       const amp = 10 + 70 * k;
       ctx.beginPath();
       for (let x = 0; x <= w; x += 6) {
         const u = x / w;
-        const env = Math.exp(-Math.pow((u - peak) / 0.22, 2));
+        const env = 0.25 + 0.75 * Math.exp(-Math.pow((u - peak) / 0.25, 2));
         const wave =
           Math.sin(u * 9 + t * 0.9 + i * 0.35) * 0.55 +
           Math.sin(u * 23 - t * 1.6 + i * 0.12) * 0.3 +
@@ -75,8 +75,8 @@ export function WaveField({ dark }: { dark: boolean }) {
         else ctx.lineTo(x, y);
       }
       const grad = ctx.createLinearGradient(0, 0, w, 0);
-      const a = (dark ? 0.08 : 0.1) + k * (dark ? 0.32 : 0.25);
-      grad.addColorStop(0, `rgba(${BLUE.join(",")},0)`);
+      const a = (dark ? 0.14 : 0.12) + k * (dark ? 0.4 : 0.3);
+      grad.addColorStop(0, `rgba(${BLUE.join(",")},${a * 0.35})`);
       grad.addColorStop(0.45, `rgba(${mix(BLUE, RED, k)},${a})`);
       grad.addColorStop(1, `rgba(${RED.join(",")},${a * 0.4})`);
       ctx.strokeStyle = grad;
@@ -119,4 +119,15 @@ export function SpectrumRing({ className = "" }: { className?: string }) {
     ctx.stroke();
   });
   return <canvas ref={ref} aria-hidden className={`pointer-events-none ${className}`} />;
+}
+
+// Slow-drifting aurora of blurred light behind everything.
+export function Aurora() {
+  return (
+    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+      <div className="aurora aurora-1" />
+      <div className="aurora aurora-2" />
+      <div className="aurora aurora-3" />
+    </div>
+  );
 }

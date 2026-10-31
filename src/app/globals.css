@@ -31,6 +31,17 @@ body {
   }
 }
 
+@layer components {
+  .aurora { position: absolute; border-radius: 9999px; filter: blur(90px); opacity: .55; will-change: transform; }
+  .aurora-1 { width: 55vw; height: 55vw; left: -10vw; top: -15vw; background: #ff0000; opacity: .2; animation: drift1 22s ease-in-out infinite alternate; }
+  .aurora-2 { width: 50vw; height: 50vw; right: -12vw; top: 10vh; background: #2f6bff; opacity: .3; animation: drift2 26s ease-in-out infinite alternate; }
+  .aurora-3 { width: 45vw; height: 45vw; left: 25vw; bottom: -20vw; background: #8a2be2; opacity: .25; animation: drift3 30s ease-in-out infinite alternate; }
+}
+
+@keyframes drift1 { 0% { transform: translate(0, 0) scale(1); } 50% { transform: translate(30vw, 20vh) scale(1.2); } 100% { transform: translate(10vw, 45vh) scale(.9); } }
+@keyframes drift2 { 0% { transform: translate(0, 0) scale(1.1); } 50% { transform: translate(-35vw, 25vh) scale(.85); } 100% { transform: translate(-15vw, -10vh) scale(1.2); } }
+@keyframes drift3 { 0% { transform: translate(0, 0) scale(.9); } 50% { transform: translate(-20vw, -40vh) scale(1.15); } 100% { transform: translate(25vw, -20vh) scale(1); } }
+
 @keyframes shimmer { 0%, 35% { background-position: 100% 0; } 75%, 100% { background-position: -50% 0; } }
 @keyframes ticker { to { transform: translateX(-50%); } }
 @keyframes grain {
@@ -39,5 +50,5 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .shimmer, .ticker, .grain { animation: none; }
+  .shimmer, .ticker, .grain, .aurora { animation: none; }
 }

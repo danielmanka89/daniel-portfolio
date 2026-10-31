@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { MotionConfig, motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Moon, Sun } from "lucide-react";
-import { SpectrumRing, WaveField } from "@/components/HeroVisuals";
+import { Aurora, SpectrumRing, WaveField } from "@/components/HeroVisuals";
 import SiteLogo from "@/components/SiteLogo";
 import { FaFacebookF, FaInstagram, FaPinterestP, FaXTwitter, FaYoutube } from "react-icons/fa6";
 
@@ -68,6 +68,7 @@ export default function Home() {
         py.set((e.clientY / window.innerHeight) * 2 - 1);
       }}
     >
+      <Aurora />
       <WaveField dark={theme === "dark"} />
       <div aria-hidden className="grain pointer-events-none absolute inset-0 z-[1]" />
 
