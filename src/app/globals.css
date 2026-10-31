@@ -14,13 +14,6 @@ body {
 
 /* Landing page loops */
 @layer components {
-  .shimmer {
-    background: linear-gradient(110deg, currentColor 42%, #ff0000 50%, currentColor 58%) 100% 0 / 250% 100%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: shimmer 7s ease-in-out infinite;
-  }
   .ticker { animation: ticker 40s linear infinite; }
   .outline-text { -webkit-text-fill-color: transparent; -webkit-text-stroke: 1px currentColor; opacity: .22; }
   .grain {
@@ -42,7 +35,6 @@ body {
 @keyframes drift2 { 0% { transform: translate(0, 0) scale(1.1); } 50% { transform: translate(-35vw, 25vh) scale(.85); } 100% { transform: translate(-15vw, -10vh) scale(1.2); } }
 @keyframes drift3 { 0% { transform: translate(0, 0) scale(.9); } 50% { transform: translate(-20vw, -40vh) scale(1.15); } 100% { transform: translate(25vw, -20vh) scale(1); } }
 
-@keyframes shimmer { 0%, 35% { background-position: 100% 0; } 75%, 100% { background-position: -50% 0; } }
 @keyframes ticker { to { transform: translateX(-50%); } }
 @keyframes grain {
   0% { transform: translate(0, 0); } 20% { transform: translate(-3%, 2%); } 40% { transform: translate(2%, -3%); }
@@ -50,5 +42,5 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .shimmer, .ticker, .grain, .aurora { animation: none; }
+  .ticker, .grain, .aurora { animation: none; }
 }
