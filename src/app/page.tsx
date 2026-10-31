@@ -3,9 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { MotionConfig, motion } from "framer-motion";
+import { MotionConfig, motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Moon, Sun } from "lucide-react";
-import FeatherLines from "@/components/FeatherLines";
+import { SpectrumRing, WaveField } from "@/components/HeroVisuals";
 import SiteLogo from "@/components/SiteLogo";
 import { FaFacebookF, FaInstagram, FaPinterestP, FaXTwitter, FaYoutube } from "react-icons/fa6";
 
@@ -22,16 +22,9 @@ const socials = [
   { label: "Facebook", Icon: FaFacebookF, bg: "bg-[#1877F2]" },
 ];
 
-const glows = [
-  { color: "#FF0000", top: "22%", rotate: -12, delay: 0 },
-  { color: "#2F6BFF", top: "48%", rotate: 8, delay: 1.5 },
-  { color: "#F5B342", top: "72%", rotate: -4, delay: 3 },
-];
-
 const ease = [0.22, 1, 0.36, 1] as const;
 const nameLines = ["Daniel", "Livingstone", "Manka"];
-const diagonal =
-  "bg-[repeating-linear-gradient(45deg,rgba(0,0,0,0.1)_0_1px,transparent_1px_14px)] dark:bg-[repeating-linear-gradient(45deg,rgba(255,255,255,0.08)_0_1px,transparent_1px_14px)]";
+const ticker = "SOFTWARE ENGINEER ✦ MUSICIAN ✦ PRODUCER ✦ MUSIC WITH CHILDREN ✦ ";
 
 type Theme = "dark" | "light";
 
@@ -55,60 +48,50 @@ export default function Home() {
 
   const ThemeIcon = theme === "dark" ? Moon : Sun;
 
+  // Pointer parallax: portrait and text drift in opposite directions.
+  const px = useMotionValue(0);
+  const py = useMotionValue(0);
+  const sx = useSpring(px, { stiffness: 60, damping: 20 });
+  const sy = useSpring(py, { stiffness: 60, damping: 20 });
+  const portraitX = useTransform(sx, (v) => v * -18);
+  const portraitY = useTransform(sy, (v) => v * -12);
+  const textX = useTransform(sx, (v) => v * 8);
+  const textY = useTransform(sy, (v) => v * 6);
+
   return (
     <MotionConfig reducedMotion="user">
     <main
       className={`${theme === "dark" ? "dark" : ""} relative min-h-dvh overflow-hidden bg-white text-black transition-colors duration-500 dark:bg-black dark:text-white`}
+      onPointerMove={(e) => {
+        if (e.pointerType !== "mouse") return;
+        px.set((e.clientX / window.innerWidth) * 2 - 1);
+        py.set((e.clientY / window.innerHeight) * 2 - 1);
+      }}
     >
-      {/* Corner diagonal patterns */}
-      <div aria-hidden className={`absolute left-0 top-0 h-72 w-72 ${diagonal} [mask-image:radial-gradient(circle_at_top_left,black,transparent_70%)]`} />
-      <div aria-hidden className={`absolute bottom-0 right-0 h-72 w-72 ${diagonal} [mask-image:radial-gradient(circle_at_bottom_right,black,transparent_70%)]`} />
+      <WaveField dark={theme === "dark"} />
+      <div aria-hidden className="grain pointer-events-none absolute inset-0 z-[1]" />
 
-      {/* Floating glow lines */}
-      {glows.map((g) => (
-        <motion.div
-          key={g.color}
-          aria-hidden
-          className="pointer-events-none absolute -left-1/4 h-[2px] w-[150%] blur-[1px]"
-          style={{
-            top: g.top,
-            rotate: g.rotate,
-            background: `linear-gradient(90deg, transparent, ${g.color}, transparent)`,
-            boxShadow: `0 0 24px 4px ${g.color}55`,
-          }}
-          animate={{ x: ["-10%", "10%", "-10%"], opacity: [0.15, 0.6, 0.15] }}
-          transition={{ duration: 12, delay: g.delay, repeat: Infinity, ease: "easeInOut" }}
-        />
-      ))}
-
-      <SiteLogo onLight={theme === "light"} />
-
-      {/* Navbar */}
-      <header className="relative z-20 flex items-center justify-between px-6 py-6 md:px-12">
-        <div className="flex items-center gap-8">
-          <nav className="flex gap-6 text-xs font-semibold tracking-[0.2em] md:gap-10">
-            {nav.map((item, i) => (
-              <motion.span
-                key={item.label}
-                initial={{ opacity: 0, y: -12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 + i * 0.1, ease }}
-              >
-                <Link
-                  href={item.href}
-                  className="text-neutral-600 transition-colors hover:text-[#FF0000] dark:text-neutral-300 dark:hover:text-[#FF0000]"
-                >
-                  {item.label}
-                </Link>
-              </motion.span>
-            ))}
-          </nav>
-        </div>
-      </header>
+      <SiteLogo onLight={theme === "light"}>
+        {nav.map((item, i) => (
+          <motion.span
+            key={item.label}
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 + i * 0.1, ease }}
+          >
+            <Link
+              href={item.href}
+              className="text-neutral-600 transition-colors hover:text-[#FF0000] dark:text-neutral-300 dark:hover:text-[#FF0000]"
+            >
+              {item.label}
+            </Link>
+          </motion.span>
+        ))}
+      </SiteLogo>
 
       {/* Hero */}
-      <section className="relative z-10 mx-auto grid max-w-7xl items-center gap-10 px-6 pb-16 md:px-12 lg:grid-cols-2">
-        <div>
+      <section className="relative z-10 mx-auto grid max-w-7xl items-center gap-10 px-6 pb-16 pt-28 md:px-12 lg:grid-cols-2">
+        <motion.div style={{ x: textX, y: textY }}>
           <motion.p
             initial={{ opacity: 0, filter: "blur(12px)" }}
             animate={{ opacity: 1, filter: "blur(0px)" }}
@@ -121,7 +104,7 @@ export default function Home() {
             {nameLines.map((line, i) => (
               <span key={line} className="block overflow-hidden pb-[0.06em]">
                 <motion.span
-                  className="block"
+                  className="shimmer block"
                   initial={{ y: "110%" }}
                   animate={{ y: 0 }}
                   transition={{ duration: 0.9, delay: 0.3 + i * 0.15, ease }}
@@ -145,10 +128,10 @@ export default function Home() {
                 key={label}
                 href="#"
                 aria-label={label}
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
                 whileHover={{ y: -4 }}
-                transition={{ type: "spring", stiffness: 300, damping: 18, delay: 1.15 + i * 0.08 }}
+                transition={{ duration: 0.8, delay: 1.1 + i * 0.06, ease }}
                 className={`flex h-12 w-12 items-center justify-center text-lg text-white ${bg}`}
               >
                 <Icon />
@@ -156,8 +139,8 @@ export default function Home() {
             ))}
             <motion.a
               href="#"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               whileHover={{ y: -4 }}
               transition={{ duration: 0.6, delay: 1.5, ease }}
               className="ml-2 flex h-12 items-center gap-3 bg-[#FF0000] px-7 text-sm font-bold tracking-[0.2em] text-white"
@@ -165,30 +148,24 @@ export default function Home() {
               <FaYoutube size={20} /> YOUTUBE CHANNEL
             </motion.a>
           </div>
-        </div>
+        </motion.div>
 
         <div className="relative mx-auto aspect-square w-full max-w-lg">
-          <FeatherLines className="absolute -inset-10 h-[calc(100%+5rem)] w-[calc(100%+5rem)]" />
-          {/* Pulsing glow + slow orbit ring behind the cutout */}
           <motion.div
             aria-hidden
-            className="absolute inset-[12%] rounded-full bg-[radial-gradient(circle,rgba(255,0,0,0.45),rgba(47,107,255,0.25)_55%,transparent_72%)] blur-2xl"
-            initial={{ opacity: 0, scale: 0.6 }}
-            animate={{ opacity: [0.7, 1, 0.7], scale: [0.95, 1.05, 0.95] }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute inset-[14%] rounded-full bg-[radial-gradient(circle,rgba(255,0,0,0.4),rgba(47,107,255,0.2)_55%,transparent_72%)] blur-3xl"
+            animate={{ opacity: [0.6, 1, 0.6], scale: [0.95, 1.06, 0.95] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
           />
-          <motion.div
-            aria-hidden
-            className="absolute inset-[6%] rounded-full border border-dashed border-[#FF0000]/40"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1, rotate: 360 }}
-            transition={{ opacity: { duration: 1, delay: 0.8 }, rotate: { duration: 60, repeat: Infinity, ease: "linear" } }}
-          />
+          <motion.div aria-hidden className="absolute inset-0" style={{ x: portraitX, y: portraitY }}>
+            <SpectrumRing className="absolute inset-[-6%] h-[112%] w-[112%]" />
+          </motion.div>
           <motion.div
             initial={{ opacity: 0, y: 80 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, delay: 0.3, ease }}
             className="absolute inset-0"
+            style={{ x: portraitX, y: portraitY }}
           >
             <motion.div
               className="absolute inset-0"
@@ -211,6 +188,13 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
+
+      <div aria-hidden className="relative z-10 overflow-hidden border-y border-black/10 py-5 dark:border-white/10">
+        <div className="ticker flex w-max whitespace-nowrap text-5xl font-black uppercase tracking-tight md:text-7xl">
+          <span className="outline-text pr-4">{ticker.repeat(3)}</span>
+          <span className="outline-text pr-4">{ticker.repeat(3)}</span>
+        </div>
+      </div>
 
       <button
         onClick={toggleTheme}

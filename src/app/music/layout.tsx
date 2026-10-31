@@ -14,14 +14,13 @@ export default function MusicLayout({ children }: { children: React.ReactNode })
         aria-hidden
         className="pointer-events-none fixed inset-0 z-0 bg-[repeating-linear-gradient(90deg,rgba(255,255,255,0.06)_0_1px,transparent_1px_25%)]"
       />
-      <SiteLogo />
-      <header className="absolute inset-x-0 top-0 z-20 flex justify-start gap-8 bg-transparent px-6 py-6 text-xs font-bold tracking-[0.3em] md:px-12">
+      <SiteLogo>
         {nav.map((item) => (
-          <Link key={item.label} href={item.href} className="uppercase transition-colors hover:text-red-600">
+          <Link key={item.label} href={item.href} className="transition-colors hover:text-red-600">
             {item.label}
           </Link>
         ))}
-      </header>
+      </SiteLogo>
       <main className="relative z-10">{children}</main>
     </div>
   );
