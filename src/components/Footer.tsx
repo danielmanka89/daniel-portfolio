@@ -9,7 +9,7 @@ export default function Footer() {
     <footer className={`relative z-10 bg-black px-6 pb-24 pt-10 md:pb-10 ${offset}`}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/logo/dlm-logo-animated-transparent.svg"
+        src="/logo/dlm-logo-animated.svg"
         alt="Daniel Livingstone Manka"
         width={640}
         height={352}
